@@ -16,9 +16,7 @@ namespace bai3
 {
     public partial class Form1 : Form
     {
-        // =========================================================
-        // DỮ LIỆU
-        // =========================================================
+  
 
         private BindingList<Product> products;
 
@@ -26,36 +24,30 @@ namespace bai3
 
         private string selectedImagePath = "";
 
-        // =========================================================
-        // KHỞI TẠO FORM
-        // =========================================================
+
 
         public Form1()
         {
             InitializeComponent();
 
-            // Khởi tạo danh sách
+       
             products = new BindingList<Product>();
 
-            // Load ComboBox
+           
             LoadCategories();
 
-            // Binding dữ liệu
+         
             SetupDataBinding();
 
-            // Gắn các sự kiện Click/TextChanged/SelectionChanged
+         
             RegisterEvents();
 
-            // Cập nhật StatusStrip
+        
             UpdateStatus();
 
-            // Không chọn dòng nào lúc đầu
+          
             dgvProducts.ClearSelection();
         }
-
-        // =========================================================
-        // COMBOBOX DANH MỤC
-        // =========================================================
 
         private void LoadCategories()
         {
@@ -80,10 +72,10 @@ namespace bai3
                 }
             };
 
-            // Đúng yêu cầu DisplayMember
+           
             cboCategory.DisplayMember = "Name";
 
-            // Đúng yêu cầu ValueMember
+           
             cboCategory.ValueMember = "Id";
 
             cboCategory.DataSource = categories;
@@ -91,10 +83,7 @@ namespace bai3
             cboCategory.SelectedIndex = -1;
         }
 
-        // =========================================================
-        // BINDING
-        // BindingList<Product> -> BindingSource -> DataGridView
-        // =========================================================
+   
 
         private void SetupDataBinding()
         {
@@ -113,64 +102,51 @@ namespace bai3
 
             dgvProducts.AllowUserToAddRows = false;
 
-            // TC03
-            // Hiển thị 25,000,000
+       
             colUnitPrice.DefaultCellStyle.Format = "N0";
 
             colUnitPrice.DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleRight;
         }
 
-        // =========================================================
-        // GẮN TOÀN BỘ SỰ KIỆN
-        // =========================================================
 
         private void RegisterEvents()
         {
-            // CHỌN ẢNH
+          
             btnChooseImage.Click += btnChooseImage_Click;
 
-            // THÊM
+     
             btnAdd.Click += btnAdd_Click;
 
-            // CẬP NHẬT
+         
             btnUpdate.Click += btnUpdate_Click;
 
-            // XÓA
+         
             btnDelete.Click += btnDelete_Click;
 
-            // CLICK/CHỌN DÒNG DATAGRIDVIEW
+            
             dgvProducts.SelectionChanged +=
                 dgvProducts_SelectionChanged;
 
-            // LIVE SEARCH
+         
             txtSearch.TextChanged +=
                 txtSearch_TextChanged;
 
-            // EXPORT CSV
+     
             mnuExportCSV.Click +=
                 mnuExportCSV_Click;
 
-            // EXIT
             mnuExit.Click +=
                 mnuExit_Click;
         }
 
-        // =========================================================
-        // VALIDATION
-        // TC02
-        // =========================================================
 
         private bool ValidateInput()
         {
             bool valid = true;
 
-            // Xóa lỗi cũ
             errorProvider.Clear();
 
-            // -----------------------------------------------------
-            // TÊN SẢN PHẨM
-            // -----------------------------------------------------
 
             if (string.IsNullOrWhiteSpace(
                 txtProductName.Text))
@@ -182,9 +158,7 @@ namespace bai3
                 valid = false;
             }
 
-            // -----------------------------------------------------
-            // ĐƠN GIÁ
-            // -----------------------------------------------------
+      
 
             decimal price;
 
@@ -200,9 +174,6 @@ namespace bai3
                 valid = false;
             }
 
-            // -----------------------------------------------------
-            // SỐ LƯỢNG
-            // -----------------------------------------------------
 
             int quantity;
 
@@ -221,10 +192,7 @@ namespace bai3
             return valid;
         }
 
-        // =========================================================
-        // CHỌN ẢNH
-        // TC04
-        // =========================================================
+  
 
         private void btnChooseImage_Click(
             object sender,
@@ -236,7 +204,7 @@ namespace bai3
                 openFileDialog.Title =
                     "Chọn ảnh sản phẩm";
 
-                // Chỉ hiển thị file ảnh
+             
                 openFileDialog.Filter =
                     "File ảnh (*.png;*.jpg;*.jpeg;*.bmp)|" +
                     "*.png;*.jpg;*.jpeg;*.bmp";
@@ -253,7 +221,7 @@ namespace bai3
 
                     try
                     {
-                        // Xóa ảnh cũ
+                      
                         if (picAvatar.Image != null)
                         {
                             picAvatar.Image.Dispose();
@@ -261,8 +229,6 @@ namespace bai3
                             picAvatar.Image = null;
                         }
 
-                        // Load ảnh
-                        // Cách này không khóa file ảnh
                         using (Image tempImage =
                                Image.FromFile(
                                    selectedImagePath))
@@ -271,7 +237,7 @@ namespace bai3
                                 new Bitmap(tempImage);
                         }
 
-                        // TC04 yêu cầu Zoom
+                    
                         picAvatar.SizeMode =
                             PictureBoxSizeMode.Zoom;
                     }
@@ -288,9 +254,7 @@ namespace bai3
             }
         }
 
-        // =========================================================
-        // THÊM MỚI
-        // =========================================================
+  
 
         private void btnAdd_Click(
             object sender,
@@ -306,9 +270,7 @@ namespace bai3
             string productId =
                 txtProductId.Text.Trim();
 
-            // -----------------------------------------------------
-            // KIỂM TRA MÃ TRÙNG
-            // -----------------------------------------------------
+         
 
             bool duplicate =
                 products.Any(p =>
@@ -330,9 +292,7 @@ namespace bai3
                 return;
             }
 
-            // -----------------------------------------------------
-            // LẤY CATEGORY ID
-            // -----------------------------------------------------
+     
 
             int categoryId = 0;
 
@@ -343,9 +303,7 @@ namespace bai3
                     out categoryId);
             }
 
-            // -----------------------------------------------------
-            // TẠO PRODUCT
-            // -----------------------------------------------------
+         
 
             Product product = new Product();
 
@@ -372,15 +330,13 @@ namespace bai3
             product.ImagePath =
                 selectedImagePath;
 
-            // -----------------------------------------------------
-            // THÊM VÀO BindingList
-            // -----------------------------------------------------
+   
 
             products.Add(product);
 
             productBindingSource.ResetBindings(false);
 
-            // Status
+          
             UpdateStatus();
 
             MessageBox.Show(
@@ -392,10 +348,7 @@ namespace bai3
             ClearInput();
         }
 
-        // =========================================================
-        // CLICK DÒNG DATAGRIDVIEW
-        // -> NẠP NGƯỢC LÊN FORM
-        // =========================================================
+
 
         private void dgvProducts_SelectionChanged(
             object sender,
@@ -417,43 +370,40 @@ namespace bai3
 
             selectedProduct = product;
 
-            // Mã SP
             txtProductId.Text =
                 product.ProductId;
 
-            // Tên
+       
             txtProductName.Text =
                 product.ProductName;
 
-            // Danh mục
+
             cboCategory.SelectedValue =
                 product.CategoryId;
 
-            // Đơn giá
+          
             txtUnitPrice.Text =
                 product.UnitPrice.ToString("0");
 
-            // Số lượng
+          
             txtQuantity.Text =
                 product.Quantity.ToString();
 
-            // Đường dẫn ảnh
+   
             selectedImagePath =
                 product.ImagePath;
 
-            // Load lại ảnh
+      
             LoadProductImage(
                 product.ImagePath);
         }
 
-        // =========================================================
-        // LOAD ẢNH KHI CLICK DATAGRIDVIEW
-        // =========================================================
+   
 
         private void LoadProductImage(
             string imagePath)
         {
-            // Xóa ảnh cũ
+ 
             if (picAvatar.Image != null)
             {
                 picAvatar.Image.Dispose();
@@ -490,15 +440,13 @@ namespace bai3
             }
         }
 
-        // =========================================================
-        // CẬP NHẬT
-        // =========================================================
+       
 
         private void btnUpdate_Click(
             object sender,
             EventArgs e)
         {
-            // Phải chọn sản phẩm
+          
             if (selectedProduct == null)
             {
                 MessageBox.Show(
@@ -510,7 +458,7 @@ namespace bai3
                 return;
             }
 
-            // Validation
+    
             if (!ValidateInput())
             {
                 return;
@@ -519,9 +467,7 @@ namespace bai3
             string newProductId =
                 txtProductId.Text.Trim();
 
-            // -----------------------------------------------------
-            // KIỂM TRA MÃ TRÙNG VỚI SẢN PHẨM KHÁC
-            // -----------------------------------------------------
+    
 
             bool duplicate =
                 products.Any(p =>
@@ -550,9 +496,7 @@ namespace bai3
                     out categoryId);
             }
 
-            // -----------------------------------------------------
-            // UPDATE
-            // -----------------------------------------------------
+         
 
             selectedProduct.ProductId =
                 txtProductId.Text.Trim();
@@ -577,7 +521,7 @@ namespace bai3
             selectedProduct.ImagePath =
                 selectedImagePath;
 
-            // Refresh Grid
+     
             productBindingSource.ResetBindings(false);
 
             MessageBox.Show(
@@ -587,10 +531,7 @@ namespace bai3
                 MessageBoxIcon.Information);
         }
 
-        // =========================================================
-        // XÓA
-        // TC05
-        // =========================================================
+      
 
         private void btnDelete_Click(
             object sender,
@@ -607,8 +548,7 @@ namespace bai3
                 return;
             }
 
-            // TC05:
-            // Yes / No + Question
+   
             DialogResult result =
                 MessageBox.Show(
                     "Bạn có chắc chắn muốn xóa sản phẩm:\n" +
@@ -633,9 +573,7 @@ namespace bai3
             }
         }
 
-        // =========================================================
-        // LIVE SEARCH
-        // =========================================================
+
 
         private void txtSearch_TextChanged(
             object sender,
@@ -646,7 +584,7 @@ namespace bai3
                     .Trim()
                     .ToLower();
 
-            // Không nhập gì -> hiện toàn bộ
+          
             if (string.IsNullOrWhiteSpace(
                 keyword))
             {
@@ -659,7 +597,7 @@ namespace bai3
                 return;
             }
 
-            // Tìm theo tên
+      
             List<Product> result =
                 products
                     .Where(p =>
@@ -678,10 +616,6 @@ namespace bai3
             dgvProducts.ClearSelection();
         }
 
-        // =========================================================
-        // EXPORT CSV
-        // CTRL + E
-        // =========================================================
 
         private void mnuExportCSV_Click(
             object sender,
@@ -730,7 +664,7 @@ namespace bai3
                                false,
                                new UTF8Encoding(true)))
                     {
-                        // Header CSV
+           
                         writer.WriteLine(
                             "Mã SP,Tên SP,Danh Mục,Đơn Giá,Số Lượng");
 
@@ -768,9 +702,7 @@ namespace bai3
             }
         }
 
-        // =========================================================
-        // XỬ LÝ CSV
-        // =========================================================
+     
 
         private string ToCsv(string value)
         {
@@ -787,10 +719,7 @@ namespace bai3
             return "\"" + value + "\"";
         }
 
-        // =========================================================
-        // EXIT
-        // CTRL + X
-        // =========================================================
+    
 
         private void mnuExit_Click(
             object sender,
@@ -810,9 +739,6 @@ namespace bai3
             }
         }
 
-        // =========================================================
-        // XÓA DỮ LIỆU Ô NHẬP
-        // =========================================================
 
         private void ClearInput()
         {
@@ -844,9 +770,7 @@ namespace bai3
             txtProductId.Focus();
         }
 
-        // =========================================================
-        // STATUS STRIP
-        // =========================================================
+      
 
         private void UpdateStatus()
         {
@@ -980,9 +904,8 @@ namespace bai3
             errorProvider = new ErrorProvider(components);
             productBindingSource = new BindingSource(components);
 
-            // ==============================
-            // MENU
-            // ==============================
+  
+
 
             menuStrip1.Items.AddRange(new ToolStripItem[]
             {
@@ -1005,18 +928,13 @@ namespace bai3
 
             menuStrip1.Dock = DockStyle.Top;
 
-            // ==============================
-            // STATUS
-            // ==============================
 
             lblStatus.Text = "Tổng số sản phẩm: 0";
 
             statusStrip1.Items.Add(lblStatus);
             statusStrip1.Dock = DockStyle.Bottom;
 
-            // ==============================
-            // TABLE MAIN
-            // ==============================
+        
 
             tableMain.Dock = DockStyle.Fill;
 
@@ -1038,15 +956,13 @@ namespace bai3
             tableMain.Controls.Add(pnlInput, 0, 0);
             tableMain.Controls.Add(pnlData, 1, 0);
 
-            // ==============================
-            // PANEL TRÁI
-            // ==============================
+          
 
             pnlInput.Dock = DockStyle.Fill;
             pnlInput.Padding = new Padding(15);
             pnlInput.BorderStyle = BorderStyle.FixedSingle;
 
-            // Tiêu đề
+  
             lblTitleInput.Text = "THÔNG TIN SẢN PHẨM";
             lblTitleInput.Font =
                 new Font("Segoe UI", 14F, FontStyle.Bold);
@@ -1054,7 +970,7 @@ namespace bai3
             lblTitleInput.AutoSize = true;
             lblTitleInput.Location = new Point(20, 20);
 
-            // Mã sản phẩm
+
             lblProductId.Text = "Mã sản phẩm";
             lblProductId.AutoSize = true;
             lblProductId.Location = new Point(20, 70);
@@ -1066,7 +982,7 @@ namespace bai3
                 AnchorStyles.Left |
                 AnchorStyles.Right;
 
-            // Tên sản phẩm
+    
             lblProductName.Text = "Tên sản phẩm";
             lblProductName.AutoSize = true;
             lblProductName.Location = new Point(20, 130);
@@ -1078,7 +994,6 @@ namespace bai3
                 AnchorStyles.Left |
                 AnchorStyles.Right;
 
-            // Danh mục
             lblCategory.Text = "Danh mục";
             lblCategory.AutoSize = true;
             lblCategory.Location = new Point(20, 190);
@@ -1094,7 +1009,6 @@ namespace bai3
                 AnchorStyles.Left |
                 AnchorStyles.Right;
 
-            // Đơn giá
             lblUnitPrice.Text = "Đơn giá";
             lblUnitPrice.AutoSize = true;
             lblUnitPrice.Location = new Point(20, 250);
@@ -1107,7 +1021,7 @@ namespace bai3
                 AnchorStyles.Left |
                 AnchorStyles.Right;
 
-            // Số lượng
+
             lblQuantity.Text = "Số lượng";
             lblQuantity.AutoSize = true;
             lblQuantity.Location = new Point(20, 310);
@@ -1120,7 +1034,6 @@ namespace bai3
                 AnchorStyles.Left |
                 AnchorStyles.Right;
 
-            // PictureBox
             picAvatar.Location = new Point(20, 375);
             picAvatar.Size = new Size(200, 125);
 
@@ -1130,7 +1043,7 @@ namespace bai3
             picAvatar.SizeMode =
                 PictureBoxSizeMode.Zoom;
 
-            // Chọn ảnh
+
             btnChooseImage.Text = "Chọn ảnh";
             btnChooseImage.Location =
                 new Point(230, 420);
@@ -1138,7 +1051,7 @@ namespace bai3
             btnChooseImage.Size =
                 new Size(90, 35);
 
-            // Các nút chức năng
+
             btnAdd.Text = "Thêm mới";
             btnAdd.Location = new Point(20, 520);
             btnAdd.Size = new Size(95, 40);
@@ -1175,9 +1088,6 @@ namespace bai3
             pnlInput.Controls.Add(btnUpdate);
             pnlInput.Controls.Add(btnDelete);
 
-            // ==============================
-            // PANEL PHẢI
-            // ==============================
 
             pnlData.Dock = DockStyle.Fill;
             pnlData.Padding = new Padding(15);
@@ -1212,9 +1122,6 @@ namespace bai3
                 AnchorStyles.Left |
                 AnchorStyles.Right;
 
-            // ==============================
-            // DATAGRIDVIEW
-            // ==============================
 
             dgvProducts.Location =
                 new Point(20, 115);
@@ -1242,26 +1149,26 @@ namespace bai3
             dgvProducts.AutoSizeColumnsMode =
                 DataGridViewAutoSizeColumnsMode.Fill;
 
-            // Cột mã SP
+         
             colProductId.HeaderText = "Mã SP";
             colProductId.DataPropertyName =
                 "ProductId";
 
-            // Cột tên SP
+   
             colProductName.HeaderText =
                 "Tên SP";
 
             colProductName.DataPropertyName =
                 "ProductName";
 
-            // Danh mục
+
             colCategory.HeaderText =
                 "Danh Mục";
 
             colCategory.DataPropertyName =
                 "CategoryName";
 
-            // Đơn giá
+      
             colUnitPrice.HeaderText =
                 "Đơn Giá";
 
@@ -1274,7 +1181,7 @@ namespace bai3
             colUnitPrice.DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleRight;
 
-            // Số lượng
+        
             colQuantity.HeaderText =
                 "Số Lượng";
 
@@ -1292,16 +1199,11 @@ namespace bai3
             pnlData.Controls.Add(lblSearch);
             pnlData.Controls.Add(txtSearch);
             pnlData.Controls.Add(dgvProducts);
-
-            // ==============================
-            // ERROR PROVIDER
-            // ==============================
+       
 
             errorProvider.ContainerControl = this;
 
-            // ==============================
-            // FORM
-            // ==============================
+     
 
             AutoScaleDimensions =
                 new SizeF(8F, 20F);
